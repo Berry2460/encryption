@@ -1,4 +1,5 @@
 def main():
+    buffer=512
     name=str(input('NAME: '))
     seed=str(input('SEED: '))
     temp=0
@@ -10,24 +11,27 @@ def main():
     while invalid:
         i=str(input('ENCRYPT (Y/N)?: '))
         if i == 'y' or i == 'Y':
-            newname='E_'+name
+            newname='ENCRYPTED_'+name
             invalid=False
         elif i == 'n' or i == 'N':
-            newname='D_'+name
+            newname='DECRYPTED_'+name
             invalid=False
             encrypt=-1
     r=open(name, 'rb')
     e=open(newname, 'wb')
-    char=r.read(1)
-    while char:
-        seed=(seed*seed+1)%49
-        byte=(int(char[0])+(encrypt*(seed%8)))
-        while byte < 0:
-            byte+=256
-        while byte > 255:
-            byte-=256
-        e.write(bytes([byte]))
-        char=r.read(1)
+    chars=r.read(buffer)
+    while chars:
+        data=b''
+        for char in chars:
+            seed=(seed*seed+1)%49
+            byte=(int(char)+(encrypt*(seed%8)))
+            while byte < 0:
+                byte+=256
+            while byte > 255:
+                byte-=256
+            data+=bytes([byte])
+        e.write(data)
+        chars=r.read(buffer)
     r.close()
     e.close()
     print('done')
