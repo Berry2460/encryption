@@ -1,6 +1,16 @@
 def main():
     buffer=64
     name=str(input('NAME: '))
+    invalid=True
+    while invalid:
+        try:
+            buffer=int(input('STEP (1-512): '))
+            if buffer < 1 or buffer > 512:
+                continue
+            else:
+                invalid=False
+        except:
+            pass
     seed=str(input('SEED: '))
     temp=0
     for c in seed:
