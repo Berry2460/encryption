@@ -1,5 +1,5 @@
 def main():
-    buffer=512
+    buffer=64
     name=str(input('NAME: '))
     seed=str(input('SEED: '))
     temp=0
@@ -21,15 +21,13 @@ def main():
     e=open(newname, 'wb')
     chars=r.read(buffer)
     while chars:
-        data=b''
-        for char in chars:
-            seed=(seed*seed+1)%49
-            byte=(int(char)+(encrypt*(seed%8)))
-            while byte < 0:
-                byte+=256
-            while byte > 255:
-                byte-=256
-            data+=bytes([byte])
+        seed=(seed*seed+1)%499
+        byte=(int(chars[seed%len(chars)])+(encrypt*(seed%8)))
+        while byte < 0:
+            byte+=256
+        while byte > 255:
+            byte-=256
+        data=chars[slice(0,seed%len(chars),1)]+bytes([byte])+chars[slice(seed%len(chars)+1,len(chars),1)]
         e.write(data)
         chars=r.read(buffer)
     r.close()
