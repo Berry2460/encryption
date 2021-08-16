@@ -26,7 +26,6 @@ def main():
             byte+=256
         while byte > 255:
             byte-=256
-        #print(char[0], byte, seed%8)
         e.write(bytes([byte]))
         char=r.read(1)
     r.close()
